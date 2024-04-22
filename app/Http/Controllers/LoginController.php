@@ -5,17 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class LoginController extends Controller
-{
+class LoginController extends Controller{
     public function registration(Request $request){
         $user=new \App\Models\User;
-        $user->name=$request->name;
-        $user->email=$request->email;
+        $user->username=$request->username;
         $user->password=\Hash::make($request->password);
         $user->save();
 
         return response()->json(["status"=>$user]);
-    }
+    }   
 
     public function logout(Request $request){
         Auth::logout();
@@ -23,15 +21,15 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
         return redirect('login');
     }
-    
+
     public function authenticate(Request $request ){
         if(Auth::attempt(
             [
-                'email'=>$request->email,
+                'username'=>$request->username,
                 'password'=>$request->password
             ]
         )){
-            return redirect('profile/andika');
+            return redirect('homepage');
         }else{
             return redirect()->back()
             ->withErrors(['message' => 'User not found'])->withInput();
