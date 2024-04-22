@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MainController;
+use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +22,17 @@ Route::get('/', function () {
 Route::get('/homepage', function(){
     return view('homepage');
 });
+
+Route::get('/login', function(){
+    return view('login');
+});
+
+Route::group(['middleware'=>'auth'],function(){
+    Route::get('/profile/{username}',[MainController::class,'profile']);
+});
+
+Route::post('/authenticate',[LoginController::class,'authenticate']);
+
+Route::get('/registration',[LoginController::class,'registration']);
+
+Route::get('/logout',[LoginController::class,'logout']);
